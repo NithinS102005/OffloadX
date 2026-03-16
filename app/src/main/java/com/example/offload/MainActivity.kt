@@ -11,7 +11,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import android.widget.Toast
 import android.net.Uri
 import androidx.activity.viewModels
@@ -42,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         // 5. Handle Phase 1 Direct Redirection (Intent filters)
         handleIntent(intent)
+
+        Toast.makeText(this, "Diagnostics: App Updated", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNewIntent(intent: Intent) {

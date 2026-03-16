@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.offload.databinding.FragmentChangePasswordBinding
-import com.google.firebase.auth.FirebaseAuth
 
 class ChangePasswordFragment : Fragment() {
 
@@ -27,45 +26,52 @@ class ChangePasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnUpdatePassword.setOnClickListener {
-            val newPass = binding.etNewPassword.text.toString()
+            val oldPass = binding.etOldPassword.text.toString().trim()
+            val newPass = binding.etNewPassword.text.toString().trim()
+            val confirmPass = binding.etConfirmPassword.text.toString().trim()
 
-            // Validation
-            if (newPass.isEmpty()) {
-                Toast.makeText(requireContext(), "Please enter a new password", Toast.LENGTH_SHORT).show()
+            // 1. Validation
+            if (oldPass.isEmpty()) {
+                binding.tilOldPassword.error = "Current password required"
                 return@setOnClickListener
-            }
-            if (newPass.length < 6) {
-                Toast.makeText(requireContext(), "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            if (!newPass.any { it.isDigit() }) {
-                Toast.makeText(requireContext(), "Password must contain at least one number", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // Firebase: Update password
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user != null) {
-                binding.btnUpdatePassword.isEnabled = false
-                binding.btnUpdatePassword.text = "Updating..."
-
-                user.updatePassword(newPass)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(requireContext(), "Password updated successfully!", Toast.LENGTH_SHORT).show()
-                            // Go back
-                            requireActivity().onBackPressedDispatcher.onBackPressed()
-                        } else {
-                            val error = task.exception?.message ?: "Failed to update password"
-                            Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-                        }
-                        binding.btnUpdatePassword.isEnabled = true
-                        binding.btnUpdatePassword.text = "Update"
-                    }
             } else {
-                Toast.makeText(requireContext(), "Not logged in!", Toast.LENGTH_SHORT).show()
+                binding.tilOldPassword.error = null
             }
+
+            if (newPass.isEmpty()) {
+                binding.tilNewPassword.error = "New password required"
+                return@setOnClickListener
+            } else if (newPass.length < 6) {
+                binding.tilNewPassword.error = "Password must be at least 6 characters"
+                return@setOnClickListener
+            } else {
+                binding.tilNewPassword.error = null
+            }
+
+            if (confirmPass != newPass) {
+                binding.tilConfirmPassword.error = "Passwords do not match"
+                return@setOnClickListener
+            } else {
+                binding.tilConfirmPassword.error = null
+            }
+
+            // 2. Mock Update
+            binding.btnUpdatePassword.isEnabled = false
+            binding.btnUpdatePassword.text = "Processing..."
+
+            // Simulate a brief delay
+            binding.btnUpdatePassword.postDelayed({
+                Toast.makeText(requireContext(), "Password updated successfully (Mock)!", Toast.LENGTH_SHORT).show()
+                // Go back to profile
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+                resetButtonState()
+            }, 500)
         }
+    }
+
+    private fun resetButtonState() {
+        binding.btnUpdatePassword.isEnabled = true
+        binding.btnUpdatePassword.text = "Update Password"
     }
 
     override fun onDestroyView() {
