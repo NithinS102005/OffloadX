@@ -64,8 +64,7 @@ class UploadFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val prefs = requireActivity().getSharedPreferences("OffloadXPrefs", Context.MODE_PRIVATE)
-        binding.etHubIp.setText(prefs.getString("hub_ip", "192.168.1.100:8000"))
+        // Automatically generate a Task ID when the screen opens
 
         // Automatically generate a Task ID when the screen opens
         binding.etTaskId.setText("TASK_${System.currentTimeMillis() / 1000}")
@@ -101,22 +100,22 @@ class UploadFragment : Fragment() {
             selectedMode = "COMPOSITE"
             binding.tvFileStatus.text = "Select File for Upload"
             
-            binding.btnModeComposite.backgroundTintList = android.content.res.ColorStateList.valueOf(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.primary_color))
-            binding.btnModeComposite.setTextColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.white_color))
+            binding.btnModeComposite.backgroundTintList = android.content.res.ColorStateList.valueOf(com.google.android.material.color.MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorPrimary, android.graphics.Color.RED))
+            binding.btnModeComposite.setTextColor(com.google.android.material.color.MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimary, android.graphics.Color.WHITE))
             
-            binding.btnModeComplex.backgroundTintList = android.content.res.ColorStateList.valueOf(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.input_bg_color))
-            binding.btnModeComplex.setTextColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.text_secondary))
+            binding.btnModeComplex.backgroundTintList = android.content.res.ColorStateList.valueOf(com.google.android.material.color.MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSurfaceVariant, android.graphics.Color.GRAY))
+            binding.btnModeComplex.setTextColor(com.google.android.material.color.MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, android.graphics.Color.DKGRAY))
         }
 
         binding.btnModeComplex.setOnClickListener {
             selectedMode = "COMPLEX"
             binding.tvFileStatus.text = "Select File for Upload"
             
-            binding.btnModeComplex.backgroundTintList = android.content.res.ColorStateList.valueOf(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.primary_color))
-            binding.btnModeComplex.setTextColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.white_color))
+            binding.btnModeComplex.backgroundTintList = android.content.res.ColorStateList.valueOf(com.google.android.material.color.MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorPrimary, android.graphics.Color.RED))
+            binding.btnModeComplex.setTextColor(com.google.android.material.color.MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimary, android.graphics.Color.WHITE))
             
-            binding.btnModeComposite.backgroundTintList = android.content.res.ColorStateList.valueOf(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.input_bg_color))
-            binding.btnModeComposite.setTextColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.text_secondary))
+            binding.btnModeComposite.backgroundTintList = android.content.res.ColorStateList.valueOf(com.google.android.material.color.MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSurfaceVariant, android.graphics.Color.GRAY))
+            binding.btnModeComposite.setTextColor(com.google.android.material.color.MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorOnSurfaceVariant, android.graphics.Color.DKGRAY))
         }
 
         // --- MAGNIFYING GLASS LOGIC ---
@@ -141,15 +140,7 @@ class UploadFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val ipAddress = binding.etHubIp.text.toString()
-            if (ipAddress.isEmpty()) {
-                binding.etHubIp.error = "IP Required for Hub"
-                return@setOnClickListener
-            }
-            
-            // Save the configured IP globally
-            requireActivity().getSharedPreferences("OffloadXPrefs", Context.MODE_PRIVATE)
-                .edit().putString("hub_ip", ipAddress).apply()
+            val ipAddress = "192.168.1.100:8000" // Default or retrieved elsewhere if needed
 
             // Real-time System Check Before Passing to Engine
             val battery = getBatteryPercentage()

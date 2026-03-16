@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
+    android:background="?attr/colorSurface"
     android:fillViewport="true">
 
     <LinearLayout
@@ -21,7 +21,7 @@
             android:src="@android:drawable/ic_menu_gallery"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/CircleImage"
-            app:strokeColor="@color/primary_color"
+            app:strokeColor="?attr/colorPrimary"
             app:strokeWidth="3dp"
             android:background="@color/input_stroke_color"
             android:padding="4dp"/>
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:cardBackgroundColor="@color/card_color"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
             app:cardCornerRadius="16dp"
             app:strokeWidth="0dp">
 
@@ -150,7 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/card_color"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
             app:cardCornerRadius="16dp"
             app:strokeWidth="0dp">
 
@@ -244,7 +244,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/card_color"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
             app:cardCornerRadius="16dp"
             app:strokeWidth="0dp">
 
@@ -371,11 +371,11 @@
                 android:layout_height="52dp"
                 android:layout_weight="4.8"
                 android:text="Logout"
-                android:textColor="@color/text_primary"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="14sp"
                 app:cornerRadius="12dp"
                 style="@style/Widget.Material3.Button"
-                app:backgroundTint="@color/danger_color" />
+                app:backgroundTint="?attr/colorError" />
         </LinearLayout>
 
     </LinearLayout>

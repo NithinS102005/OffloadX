@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -58,21 +57,14 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-<<<<<<< HEAD
     // Charting
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-    // Testing (The ones that were red)
-=======
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-auth-ktx")
-
-    // Google Sign-In
-    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    // Google Sign-In (Removed)
+    // Firebase (Removed)
 
     // Testing
->>>>>>> 699c10f8a138edeaa2b486b7cec1d9eebc1206a1
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

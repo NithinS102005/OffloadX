@@ -10,19 +10,15 @@
     <color name="text_primary_variant">#333333</color>
     <color name="text_secondary">#888888</color>
     
-<<<<<<< HEAD
-    <!-- Primary Brand Color: Maroon / Red -->
-    <color name="md_theme_light_primary">#BA1A1A</color>
-=======
-    <color name="primary_color">#2BC0A6</color>
+    <color name="primary_color">#BA1A1A</color>
     <color name="input_bg_color">#F0F0F0</color>
     <color name="input_stroke_color">#CCCCCC</color>
     <color name="danger_color">#E53935</color>
     <color name="white_color">#FFFFFF</color>
 
-    <!-- Primary Brand Color: Teal -->
-    <color name="md_theme_light_primary">#26A69A</color>
->>>>>>> 699c10f8a138edeaa2b486b7cec1d9eebc1206a1
+    <!-- Primary Brand Color: Maroon / Red -->
+    <color name="md_theme_light_primary">#BA1A1A</color>
+
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#FFDAD6</color>
     <color name="md_theme_light_onPrimaryContainer">#410002</color>

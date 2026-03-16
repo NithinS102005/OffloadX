@@ -17,8 +17,6 @@ import android.net.Uri
 import android.widget.EditText
 import android.widget.LinearLayout
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -96,12 +94,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        // --- Show REAL user data from Firebase ---
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            tvUserName.text  = user.displayName ?: "User"
-            tvUserEmail.text = user.email ?: "No email"
-        }
+        // --- Show REAL user data from SharedPreferences (Mock Auth) ---
+        tvUserName.text  = prefs.getString("user_name", "User")
+        tvUserEmail.text = prefs.getString("user_email", "No email")
 
         // --- Dark Mode Toggle ---
         val isDark = prefs.getBoolean("dark_mode", AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
@@ -140,79 +135,52 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 .setView(input)
                 .setPositiveButton("Save") { _, _ ->
                     val newName = input.text.toString().trim()
-                    if (newName.isNotEmpty() && user != null) {
-                        val profileUpdates = UserProfileChangeRequest.Builder()
-                            .setDisplayName(newName)
-                            .build()
-                        user.updateProfile(profileUpdates).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                tvUserName.text = newName
-                                Toast.makeText(context, "Name updated!", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(context, "Failed to update: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                            }
-                        }
+                    if (newName.isNotEmpty()) {
+                        prefs.edit().putString("user_name", newName).apply()
+                        tvUserName.text = newName
+                        Toast.makeText(context, "Name updated!", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
         }
 
-        // --- Delete Account ---
+        // --- Delete Account (Mock) ---
         btnDeleteAccount.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setTitle("Delete Account")
                 .setMessage("Are you absolutely sure? This action is permanent and cannot be undone.")
                 .setPositiveButton("Delete Forever") { _, _ ->
-                    if (user != null) {
-                        user.delete().addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                // Clear data
-                                val gso = com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder(
-                                    com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN
-                                ).build()
-                                val googleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(requireActivity(), gso)
-                                googleSignInClient.signOut()
+                    // Clear data
+                    prefs.edit().clear().apply()
 
-                                prefs.edit().clear().apply()
-
-                                Toast.makeText(context, "Account deleted successfully.", Toast.LENGTH_LONG).show()
-
-                                val intent = Intent(requireContext(), LoginActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
-                                requireActivity().finish()
-                            } else {
-                                Toast.makeText(context, "Delete failed. Please log out, log back in, and try again. Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    }
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
-        }
-
-        // --- Logout ---
-        btnLogout.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to log out?")
-                .setPositiveButton("Yes") { _, _ ->
-                    FirebaseAuth.getInstance().signOut()
-                    
-                    // Sign out of Google completely to force account picker next time
-                    val gso = com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder(
-                        com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN
-                    ).build()
-                    val googleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(requireActivity(), gso)
-                    googleSignInClient.signOut()
+                    Toast.makeText(context, "Account deleted successfully.", Toast.LENGTH_LONG).show()
 
                     val intent = Intent(requireContext(), LoginActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     requireActivity().finish()
                 }
-                .setNegativeButton("No", null)
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
+        // --- Logout (Mock) ---
+        btnLogout.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to exit the app and log out?")
+                .setPositiveButton("Logout") { _, _ ->
+                    // 1. Clear session state
+                    prefs.edit().putBoolean("is_logged_in", false).apply()
+
+                    // 2. Navigate to Login Activity
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+                .setNegativeButton("Cancel", null)
                 .show()
         }
     }
